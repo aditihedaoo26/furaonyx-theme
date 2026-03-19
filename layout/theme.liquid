@@ -22,7 +22,7 @@
         <a href="{{ routes.root_url }}#story">Story</a>
         <a href="{{ routes.root_url }}#craft">Craft</a>
       </div>
-      <a href="{{ routes.cart_url }}" class="nav-cart" id="cart-icon">
+      <a href="{{ routes.cart_url }}" class="nav-cart" id="cart-icon" onclick="openCartDrawer(); return false;">
         <svg viewBox="0 0 24 24">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -38,6 +38,6 @@
 
     <!-- Global Footer Section -->
     {% section 'footer' %}
-
+    {% section 'cart-drawer' %}
   </body>
 </html>
