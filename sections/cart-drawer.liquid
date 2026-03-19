@@ -6,7 +6,7 @@
     width: 100vw;
     height: 100vh;
     background: rgba(0, 0, 0, 0.7);
-    z-index: 999;
+    z-index: 9998;
     opacity: 0;
     visibility: hidden;
     transition: all 0.3s ease;
@@ -15,25 +15,23 @@
     opacity: 1;
     visibility: visible;
   }
-  .cart-drawer {
+  #cart-drawer {
     position: fixed;
+    right: 0;
     top: 0;
-    right: -450px;
-    width: 450px;
     height: 100vh;
+    width: 450px;
     background-color: #05070B;
     color: #fff;
-    z-index: 1000;
-    transition: right 0.4s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 9999;
+    transform: translateX(100%);
+    transition: transform 0.3s ease;
     display: flex;
     flex-direction: column;
     box-shadow: -5px 0 15px rgba(0,0,0,0.5);
   }
-  .cart-drawer.active {
-    right: 0;
-  }
   @media (max-width: 480px) {
-    .cart-drawer { width: 100vw; right: -100vw; }
+    #cart-drawer { width: 100vw; }
   }
   .cart-header {
     display: flex;
@@ -182,7 +180,7 @@
 </style>
 
 <div class="cart-drawer-overlay" id="cartOverlay"></div>
-<div class="cart-drawer" id="cartDrawer">
+<div id="cart-drawer">
   <div class="cart-header">
     <h2>Your Cart</h2>
     <button type="button" class="btn-close-cart" id="closeCartBtn">&times;</button>
@@ -237,15 +235,23 @@
 
 <script>
   function openCartDrawer() {
-    document.getElementById('cartDrawer').classList.add('active');
-    document.getElementById('cartOverlay').classList.add('active');
-    document.body.style.overflow = 'hidden';
+    const drawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('cartOverlay');
+    if (drawer) {
+      drawer.style.transform = 'translateX(0)';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
   }
 
   function closeCartDrawer() {
-    document.getElementById('cartDrawer').classList.remove('active');
-    document.getElementById('cartOverlay').classList.remove('active');
-    document.body.style.overflow = '';
+    const drawer = document.getElementById('cart-drawer');
+    const overlay = document.getElementById('cartOverlay');
+    if (drawer) {
+      drawer.style.transform = 'translateX(100%)';
+      overlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
   }
 
   document.getElementById('closeCartBtn').addEventListener('click', closeCartDrawer);
@@ -255,19 +261,17 @@
   window.closeCartDrawer = closeCartDrawer;
 
   document.addEventListener('submit', function(e) {
-    if (e.target.action && e.target.action.indexOf('/cart/add') !== -1) {
+    if (e.target.matches('[action="/cart/add"]')) {
       e.preventDefault();
       
-      let formData = new FormData(e.target);
+      const formData = new FormData(e.target);
       
-      fetch(window.Shopify.routes.root + 'cart/add.js', {
+      fetch('/cart/add.js', {
         method: 'POST',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
         body: formData
       })
-      .then(response => {
+      .then(response => response.json())
+      .then(data => {
         refreshCartDrawer();
         openCartDrawer();
       })
@@ -300,7 +304,6 @@
         const newDrawer = doc.getElementById('shopify-section-cart-drawer');
         if (newDrawer) {
           document.getElementById('shopify-section-cart-drawer').innerHTML = newDrawer.innerHTML;
-          
           document.getElementById('closeCartBtn').addEventListener('click', closeCartDrawer);
           document.getElementById('cartOverlay').addEventListener('click', closeCartDrawer);
         } else {
