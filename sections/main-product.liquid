@@ -1,0 +1,155 @@
+<style>
+  .product-detail-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4rem;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 120px 5%;
+    background-color: #05070B;
+    color: #ffffff;
+  }
+  .product-gallery, .product-info {
+    flex: 1 1 400px;
+  }
+  .product-gallery img {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    border: 1px solid rgba(201, 162, 74, 0.2);
+    object-fit: cover;
+  }
+  .product-info h1 {
+    color: #C9A24A;
+    font-size: clamp(2rem, 4vw, 3rem);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+  .product-price {
+    color: #C9A24A;
+    font-size: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .product-description {
+    color: #A0A0A0;
+    line-height: 1.8;
+    margin-bottom: 2.5rem;
+    font-size: 1.1rem;
+  }
+  .btn-add-to-cart {
+    background-color: #C9A24A;
+    color: #05070B;
+    border: none;
+    padding: 1rem 3rem;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    width: 100%;
+    transition: background-color 0.3s;
+  }
+  .btn-add-to-cart:hover {
+    background-color: #dcb866;
+  }
+  .trust-badges {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 2rem;
+  }
+  .trust-badge-item {
+    flex: 1;
+    text-align: center;
+  }
+  .trust-badge-item svg {
+    width: 24px;
+    height: 24px;
+    fill: #C9A24A;
+    margin-bottom: 0.5rem;
+  }
+  .trust-badge-item p {
+    font-size: 0.85rem;
+    color: #A0A0A0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .product-specs {
+    margin-top: 3rem;
+  }
+  .product-specs h3 {
+    color: #C9A24A;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: 0.5rem;
+  }
+  .product-specs ul {
+    list-style: none;
+    padding: 0;
+    color: #A0A0A0;
+    font-size: 0.95rem;
+    line-height: 2;
+  }
+  .product-specs li strong {
+    color: #fff;
+  }
+</style>
+
+<div class="product-detail-layout">
+  <div class="product-gallery">
+    <img src="{{ product.featured_image | img_url: 'master' }}" alt="{{ product.title | escape }}" />
+  </div>
+
+  <div class="product-info">
+    <h1>{{ product.title }}</h1>
+    <p class="product-price">{{ product.price | money }}</p>
+    
+    <div class="product-description">
+      {{ product.description }}
+    </div>
+
+    {% form 'product', product %}
+      <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+      <button type="submit" class="btn-add-to-cart">Add to Cart</button>
+    {% endform %}
+
+    <!-- Trust Badges -->
+    <div class="trust-badges">
+      <div class="trust-badge-item">
+        <svg viewBox="0 0 24 24"><path d="M20 8h-3V4H3v13h2v-2h14v-7zM5 15V6h10v9H5zm14-1v-4h-2v4h2z"/></svg>
+        <p>Free Shipping</p>
+      </div>
+      <div class="trust-badge-item">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zM12 21.93c-4.05-1.12-7-5.32-7-10.93V6.3l7-3.11 7 3.11v4.7c0 5.61-2.95 9.81-7 10.93z"/></svg>
+        <p>1-Year Warranty</p>
+      </div>
+      <div class="trust-badge-item">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10.011 10.011 0 0012 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"/></svg>
+        <p>7-Day Returns</p>
+      </div>
+    </div>
+
+    <!-- Specifications Section -->
+    <div class="product-specs">
+      <h3>Specifications</h3>
+      <ul>
+        <li><strong>Case Material:</strong> 316L Stainless Steel</li>
+        <li><strong>Glass:</strong> Sapphire Crystal</li>
+        <li><strong>Movement:</strong> Precision Automatic</li>
+        <li><strong>Water Resistance:</strong> 10 ATM</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Product Page",
+  "settings": []
+}
+{% endschema %}

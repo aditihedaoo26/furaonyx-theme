@@ -2,7 +2,7 @@
   "name": "Product",
   "sections": {
     "main": {
-      "type": "collection"
+      "type": "main-product"
     }
   },
   "order": [
