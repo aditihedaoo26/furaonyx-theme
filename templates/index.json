@@ -1,0 +1,27 @@
+{
+  "name": "Home page",
+  "sections": {
+    "hero": {
+      "type": "hero"
+    },
+    "story": {
+      "type": "story"
+    },
+    "craftsmanship": {
+      "type": "craftsmanship"
+    },
+    "collection": {
+      "type": "collection"
+    },
+    "testimonial": {
+      "type": "testimonial"
+    }
+  },
+  "order": [
+    "hero",
+    "story",
+    "craftsmanship",
+    "collection",
+    "testimonial"
+  ]
+}

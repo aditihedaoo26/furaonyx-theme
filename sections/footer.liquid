@@ -1,0 +1,36 @@
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h2>FURAONYX</h2>
+      <p>Modern ambition, refined. Premium timepieces for men who move with intention.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <ul>
+        <li><a href="{{ routes.all_products_collection_url }}">Collection</a></li>
+        <li><a href="{{ routes.root_url }}#story">Our Story</a></li>
+        <li><a href="{{ routes.root_url }}#craft">Craftsmanship</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#shipping">Shipping & Returns</a></li>
+        <li><a href="#warranty">Warranty</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#privacy">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© {{ 'now' | date: '%Y' }} {{ shop.name }}. ALL RIGHTS RESERVED.</p>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": []
+}
+{% endschema %}
