@@ -1,5 +1,9 @@
 {
   "name": "Cart",
-  "sections": {},
-  "order": []
+  "sections": {
+    "main": {
+      "type": "main-cart"
+    }
+  },
+  "order": ["main"]
 }

@@ -1,0 +1,121 @@
+{% schema %}
+{
+  "name": "Cart Page",
+  "settings": []
+}
+{% endschema %}
+
+<div class="cart-page-wrapper">
+  <!-- Progress UI -->
+  <div class="checkout-progress">
+    <div class="step active">BAG</div>
+    <div class="step-divider"></div>
+    <div class="step">ADDRESS</div>
+    <div class="step-divider"></div>
+    <div class="step">PAYMENT</div>
+  </div>
+
+  <div class="cart-page-content">
+    
+    <!-- Left Column: Items -->
+    <div class="cart-items-col">
+      <h1 class="cart-title">Your Cart</h1>
+      
+      {% if cart.item_count == 0 %}
+        <div class="empty-cart-state">
+          <p>Your cart is empty.</p>
+          <a href="{{ routes.all_products_collection_url }}" class="btn-golden">CONTINUE SHOPPING</a>
+        </div>
+      {% else %}
+        <form action="{{ routes.cart_url }}" method="post" id="mainCartForm">
+          <div class="cart-items-list">
+            {% for item in cart.items %}
+              <div class="cart-item-row" data-key="{{ item.key }}">
+                <div class="cart-item-image">
+                  <a href="{{ item.url }}">
+                    <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.title | escape }}">
+                  </a>
+                </div>
+                <div class="cart-item-details">
+                  <div class="cart-item-header">
+                    <a href="{{ item.url }}" class="cart-item-title">{{ item.product.title }}</a>
+                    <button type="button" class="btn-remove-item" onclick="updateMainCart('{{ item.key }}', 0)">
+                      <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                    </button>
+                  </div>
+                  {% unless item.variant.title contains 'Default' %}
+                    <p class="cart-item-variant">{{ item.variant.title }}</p>
+                  {% endunless %}
+                  <div class="cart-item-price-qty">
+                    <div class="cart-item-price">{{ item.price | money }}</div>
+                    <div class="cart-qty-widget">
+                      <button type="button" class="qty-control" onclick="updateMainCart('{{ item.key }}', {{ item.quantity | minus: 1 }})">-</button>
+                      <input type="text" name="updates[]" value="{{ item.quantity }}" class="qty-input" readonly>
+                      <button type="button" class="qty-control" onclick="updateMainCart('{{ item.key }}', {{ item.quantity | plus: 1 }})">+</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </form>
+      {% endif %}
+    </div>
+
+    <!-- Right Column: Summary -->
+    {% if cart.item_count > 0 %}
+    <div class="cart-summary-col">
+      <div class="summary-card glass-panel">
+        
+        <div class="summary-section delivery-check">
+          <h3>Check Delivery Time</h3>
+          <div class="input-group">
+            <input type="text" id="pincodeInput" placeholder="Enter PIN code" maxlength="6">
+            <button type="button" id="checkPincodeBtn" class="btn-outline-gold">Check</button>
+          </div>
+          <p id="deliveryMsg" class="delivery-msg" style="display:none;">Delivery in 3-5 days</p>
+        </div>
+
+        <div class="summary-section coupon-check">
+          <h3>Apply Coupon</h3>
+          <div class="input-group">
+            <input type="text" id="couponInput" placeholder="Enter code">
+            <button type="button" id="applyCouponBtn" class="btn-outline-gold">Apply</button>
+          </div>
+          <p id="couponMsg" class="coupon-msg" style="display:none; color: #4CAF50;">Coupon applied! Discount previewed below.</p>
+        </div>
+
+        <div class="summary-section totals">
+          <div class="totals-row">
+            <span>Subtotal</span>
+            <span class="totals-value">{{ cart.total_price | money }}</span>
+          </div>
+          <div class="totals-row discount-row" id="discountRow" style="display:none;">
+            <span>Discount</span>
+            <span class="totals-value" style="color: #4CAF50;">- {{ 0 | money }}</span>
+          </div>
+          <div class="totals-row shipping">
+            <span>Shipping</span>
+            <span class="totals-value highlight">Free Shipping Across India</span>
+          </div>
+          <div class="totals-row grand-total">
+            <span>Total</span>
+            <span class="totals-value grand-amount">{{ cart.total_price | money }}</span>
+          </div>
+        </div>
+
+        <button type="submit" form="mainCartForm" name="checkout" class="btn-secure-checkout" onclick="window.location.href='{{ routes.checkout_url }}'; return false;">
+          SECURE CHECKOUT
+        </button>
+
+        <div class="trust-badge-cart">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#C9A24A"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zM12 21.93c-4.05-1.12-7-5.32-7-10.93V6.3l7-3.11 7 3.11v4.7c0 5.61-2.95 9.81-7 10.93zm0-14.82c-2.33 0-4.22 1.89-4.22 4.22 0 1.94 1.3 3.58 3.11 4.09v3.02h2.22v-3.02C14.92 14.9 16.22 13.26 16.22 11.33 16.22 9 14.33 7.11 12 7.11z"/></svg>
+          <span>100% Secure Checkout</span>
+        </div>
+
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
